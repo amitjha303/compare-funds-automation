@@ -1,7 +1,8 @@
 package com.automation.base;
 
-import java.util.ArrayList;
 import java.util.Properties;
+import java.util.Random;
+
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -10,6 +11,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class BasePageObject<T> {
@@ -44,6 +46,30 @@ public class BasePageObject<T> {
 		find(element).click();
 	}
 	
+	protected void clearText(By element) {
+		int len = find(element).getAttribute("value").length(); 
+		for(int i = 0; i < len; i++ ) {
+			find(element).sendKeys(Keys.BACK_SPACE);
+		}
+	}
+	
+	protected void selectFromDropdown(By element, String option) {
+		Select selectOption = new Select(find(element)); 
+		selectOption.selectByValue(option);
+	}
+	
+	protected String getRandomText(int textLength) {
+		int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        Random random = new Random();
+        StringBuilder buffer = new StringBuilder(textLength);
+        for (int i = 0; i < textLength; i++) {
+            int randomLimitedInt = leftLimit + (int)(random.nextFloat() * (rightLimit - leftLimit + 1));
+            buffer.append((char) randomLimitedInt);
+        }
+		return buffer.toString();
+	}
+	
 	protected void waitForVisibilityOfElement(By locator, Integer... timeOutInSeconds) {
 		int attempts = 0;
 		while (attempts < 2) {
@@ -61,17 +87,5 @@ public class BasePageObject<T> {
 		timeOutInSeconds = timeOutInSeconds != null ? timeOutInSeconds : Integer.parseInt(config.getProperty("defaultExplicitWait"));
 		WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
 		wait.until(condition);
-	}
-	
-	protected void clearText(By element) {
-		int len = find(element).getAttribute("value").length(); 
-		for(int i = 0; i < len; i++ ) {
-			find(element).sendKeys(Keys.BACK_SPACE);
-		}
-	}
-	
-	protected void switchWindowTab(int tabIndex) {
-		ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
-		driver.switchTo().window(tabs.get(tabIndex-1));
 	}
 }

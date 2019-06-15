@@ -1,14 +1,14 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
   
-<suite name="CompareFunds" parallel="none" thread-count="1">
+<suite name="FacebookDemo" parallel="none" thread-count="1">
   <listeners>
   	<listener class-name="com.automation.base.TestListener"></listener>
   </listeners>
 
-  <test name="CompareFunds">
+  <test name="FacebookDemo">
   	<parameter name="browser" value="chrome"/>
     <classes>
-       <class name="com.automation.testcases.CompareFundsTest"/>
+       <class name="com.automation.testcases.SignUpTest"/>
     </classes>
   </test>
 </suite>
